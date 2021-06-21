@@ -7,6 +7,7 @@ from random import randint as rand
 
 startdir = 'list/'
 ext = '.list'
+sett = 'data/settings.dat'
 
 class Modes:
     def __init__(self, items):
@@ -269,7 +270,6 @@ class MainForm:
         return False
 
     def make_canonical(self, txt):
-        sett = 'settings.dat'
         ret = txt
         if os.path.isfile(sett):
             f = open (sett, 'r')
@@ -479,7 +479,6 @@ class MainForm:
         self.tk.tk.clipboard_append(data)
 
     def makeMenuOptions(self, txt):
-        sett = 'settings.dat'
         ret = []
         if os.path.isfile(sett):
             f = open(sett, 'r')
