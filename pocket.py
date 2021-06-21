@@ -392,12 +392,13 @@ class MainForm:
             self.tk.write(self.records, M)
             self.tk.write(self.listcapt, name + ' ('+str(self.getListQua(name))+')')
 
-    def addToList(self, str):
+    def addToList(self, txt):
         name = self.getListName()
         if name:
             x = RecList(name)
-            x.add(str)
+            x.add(txt)
             self.tk.write(self.records, x.info())
+            self.tk.write(self.listcapt, name + ' ('+str(self.getListQua(name))+')')
 
     def forceAdd(self, tag):
         self.addToList(self.getFromClipboard())
