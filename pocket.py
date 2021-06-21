@@ -466,8 +466,18 @@ class MainForm:
     def another(self, tag):
         if self.lastMode == 'stack':
             self.lastMode = 'random'
-        self.asStart_soft(None)
-        self.readCurrentValue(self.lastMode)
+        name = self.getListName()
+        if name:
+            x = RecList(name)
+            info = x.info()
+            if info:
+                start = info[0]
+                for loop in range(100):
+                    self.asStart_soft(None)
+                    self.readCurrentValue(self.lastMode)
+                    y = RecList(name)
+                    info2 = y.info()
+                    if not info2 or info2[0] != start: break
 
     def getFromClipboard(self):
         try:
