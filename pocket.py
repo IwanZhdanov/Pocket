@@ -237,6 +237,8 @@ class MainForm:
         w.button('Очередь')
         w.onClick(self.readAsQueue)
         w.nextRow() # FIXME:
+        self.listcapt = w.button('')
+        w.onClick(self.listNameToClipboard)
         self.records = w.listbox()
         w.onSelect(self.makeMenu)
         w.onDoubleClick(self.removeRecord)
@@ -331,6 +333,7 @@ class MainForm:
             x = RecList(name)
             M = x.info()
             self.tk.write(self.records, M)
+            self.tk.write(self.listcapt, name)
 
     def addToList(self, str):
         name = self.getListName()
@@ -382,6 +385,11 @@ class MainForm:
         self.readCurrentValue('queue')
     def readAsRandom(self, tag):
         self.readCurrentValue('random')
+
+    def listNameToClipboard(self, tag):
+        name = self.getListName()
+        self.lastInfo = name
+        self.setToClipboard(name)
 
     def rename(self, old_name, new_name):
         x = RecList(old_name)
