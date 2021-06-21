@@ -188,6 +188,41 @@ class RenameForm:
         self.tk.close()
 
 
+class Basket:
+    def __init__(self, main):
+        self._main = main
+
+        w = Window('Корзина')
+        self.tk = w
+        w.flags(top=True)
+        w.firstRow(1,50)
+        w.firstCol(1,120)
+        self.btn = w.button('0')
+        w.onClick(self.change)
+        w.nextCol(1,60)
+        w.button('x')
+        w.onClick(self.another)
+
+        self.getQuaTmr()
+
+        w.go()
+
+    def change(self, tag):
+        self._main.readNext()
+        self.getQua()
+
+    def another(self, tag):
+        self._main.another(None)
+        self.getQua()
+
+    def getQua(self):
+        self.tk.write(self.btn, str(self._main.readQua()))
+
+    def getQuaTmr(self):
+        self.getQua()
+        Timer(1, self.getQuaTmr).start()
+
+
 class MainForm:
     def __init__(self):
         self.currentName = ''
@@ -259,7 +294,7 @@ class MainForm:
         w.onClick(self.chMod)
         w.nextCol(1,sz)
         w.button('Корзина')
-        w.onClick(lambda x: w.alert('','Не реализовано'))
+        w.onClick(lambda x: Basket(self))
         w.endRow()
 
         self.drawFileList()
@@ -342,6 +377,11 @@ class MainForm:
             elif i != '--':
                 q += 1
         return q
+    def readQua(self):
+        name = self.getListName()
+        if name:
+            return self.getListQua(name)
+        return 0
 
     def showList(self, tag):
         name = self.getListName()
@@ -402,6 +442,8 @@ class MainForm:
         self.readCurrentValue('queue')
     def readAsRandom(self, tag):
         self.readCurrentValue('random')
+    def readNext(self, tag=None):
+        self.readCurrentValue(self.lastMode)
 
     def listNameToClipboard(self, tag):
         name = self.getListName()
