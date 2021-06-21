@@ -8,6 +8,7 @@ from random import randint as rand
 startdir = 'list/'
 ext = '.list'
 sett = 'data/settings.dat'
+ico = 'data/1.png'
 
 class Modes:
     def __init__(self, items):
@@ -198,6 +199,7 @@ class MainForm:
 
         w = Window('Карман v2.0')
         self.tk = w
+        w.flags(ico=ico)
         w.startRow()
         w.firstRow(0,30)
         w.button('Добавить')
