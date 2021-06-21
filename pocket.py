@@ -327,13 +327,25 @@ class MainForm:
         name = self.tk.read(self.filelist)[options[0]]
         self.currentName = name
         return name
+
+    def getListQua(self, name, first=True):
+        x = RecList(name)
+        info = x.info()
+        q = 0
+        for i in info:
+            if os.path.isfile(startdir+i+ext):
+                q += self.getListQua(i)
+            elif i != '--':
+                q += 1
+        return q
+
     def showList(self, tag):
         name = self.getListName()
         if name:
             x = RecList(name)
             M = x.info()
             self.tk.write(self.records, M)
-            self.tk.write(self.listcapt, name)
+            self.tk.write(self.listcapt, name + ' ('+str(self.getListQua(name))+')')
 
     def addToList(self, str):
         name = self.getListName()
