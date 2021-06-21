@@ -232,13 +232,13 @@ class MainForm:
         w.onClick(self.asStart)
         w.nextRow(0,60)
         w.firstCol(1,sz)
-        w.button('Стек')
+        self.mode_stack = w.button('Стек')
         w.onClick(self.readAsStack)
         w.nextCol(1,sz)
-        w.button('Рандом')
+        self.mode_random = w.button('Рандом')
         w.onClick(self.readAsRandom)
         w.nextCol(1,sz)
-        w.button('Очередь')
+        self.mode_queue = w.button('Очередь')
         w.onClick(self.readAsQueue)
         w.nextRow(0,30)
         self.listcapt = w.button('')
@@ -395,6 +395,7 @@ class MainForm:
         self.lastInfo = val
         self.showList(None)
         self.makeMenuByStr(val)
+        self.showStates()
     def readAsStack(self, tag):
         self.readCurrentValue('stack')
     def readAsQueue(self, tag):
@@ -557,6 +558,15 @@ class MainForm:
     def showStates(self):
         self.tk.write(self.can_btn, 'К:'+self.canon.text())
         self.tk.write(self.mod_btn, 'Р:'+self.mode.text())
+        m = (
+            ('stack','Стек',self.mode_stack),
+            ('queue','Очередь',self.mode_queue),
+            ('random','Рандом',self.mode_random),
+            )
+        for i in m:
+            s = i[1]
+            if self.lastMode == i[0]: s = '['+s+']'
+            self.tk.write(i[2], s)
 
     def chCan(self, tag):
         self.canon.sw()
