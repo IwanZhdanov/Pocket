@@ -374,8 +374,9 @@ class MainForm:
         for i in info:
             if os.path.isfile(startdir+i+ext):
                 q += self.getListQua(i)
-            elif i != '--':
+            else:
                 q += 1
+        if q > 0: q -= 1
         return q
     def readQua(self):
         name = self.getListName()
