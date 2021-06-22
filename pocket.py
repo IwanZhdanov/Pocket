@@ -264,7 +264,7 @@ class MainForm:
         w.onClick(self.another)
         w.nextCol(1,sz)
         w.button('Сначала')
-        w.onClick(self.asStart)
+        w.onClick(self.asStart_soft)
         w.nextRow(0,60)
         w.firstCol(1,sz)
         self.mode_stack = w.button('Стек')
