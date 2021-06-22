@@ -352,7 +352,7 @@ class MainForm:
         for i in M:
             if i[-5:] == '.list':
                 N.append(i[:-5])
-        N.sort()
+        N.sort(key=lambda x: x.lower())
         return N
     def drawFileList(self):
         N = self.getFileList()
