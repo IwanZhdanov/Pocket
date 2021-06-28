@@ -496,14 +496,19 @@ class MainForm:
             self.markAsStart(name)
         self.showList(None)
 
-    def markAsStart_soft(self, name):
+    def markAsStart_soft(self, name, value=""):
         x = RecList(name)
         info = x.info()
-        if len(info) >= 2 and os.path.isfile(startdir+info[1]+ext):
-            self.markAsStart_soft(info[1])
-            x.get('stack')
+        if info and not value: value = info[0]
+        ret = value in info
+        for inf in info[1:]:
+            if os.path.isfile(startdir+inf+ext):
+                if self.markAsStart_soft(inf, value):
+                    x.get('stack')
+                break
         if '--' not in x.info():
             x.first('--')
+        return ret
     def asStart_soft(self, tag):
         name = self.getListName()
         if name:
