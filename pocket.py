@@ -356,6 +356,20 @@ class MainForm:
             self.addToList(info)
         if self.run: Timer(1, self.checkClipboard).start()
 
+    def getMultilangRegExp(self, txt):
+        ret = "(?i)"
+        gr = {'e':'eеёэ', 'r':'rр', 't':'tт', 'y':'yы', 'u':'uу', 'i':'iи', 'o':'oо',
+         'p':'pп', 'a':'aая', 's':'sсшщ', 'd':'dд', 'f':'fф', 'g':'gг', 'h':'hх', 'j':'jй',
+         'k':'kк', 'l':'lл', 'z':'zз', 'c':'cц', 'v':'vв', 'b':'bб', 'n':'nн',
+         'm':'mм',"'":"'ъь"}
+        s = txt.lower()
+        for ch in s:
+            if ch in gr:
+                ret += '['+gr[ch]+']'
+            else:
+                ret += ch
+        return ret
+
     def getFileList(self):
         M = os.listdir(startdir)
         N = []
@@ -375,7 +389,7 @@ class MainForm:
         else:
             M = []
             for i in N:
-                if re.search('(?i)'+search, i):
+                if re.search(self.getMultilangRegExp(search), i):
                     M.append(i)
         self.tk.write(self.filelist, M)
     def addList(self, s):
