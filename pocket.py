@@ -128,13 +128,13 @@ class Confirm:
         self.tk.close()
 
 class AddForm:
-    def __init__(self, func):
+    def __init__(self, func, txt=""):
         self.func = func
         w = Window('Добавить список')
         self.tk = w
         w.label('Название списка:')
         w.nextCol()
-        self.name = w.input()
+        self.name = w.input(txt)
         w.nextRow()
         w.button('OK')
         w.onSubmit(self.submit)
@@ -147,13 +147,13 @@ class AddForm:
         self.tk.close()
 
 class RemarkForm:
-    def __init__(self, func):
+    def __init__(self, func, txt=""):
         self.func = func
         w = Window('Записать')
         self.tk = w
         w.label('Заметка:')
         w.nextCol(1, 400)
-        self.name = w.input()
+        self.name = w.input(txt)
         w.nextRow()
         w.button('OK')
         w.onSubmit(self.submit)
@@ -175,7 +175,7 @@ class RenameForm:
         w.label('Новое название:')
         w.nextCol()
         w.label(name)
-        self.new_name = w.input()
+        self.new_name = w.input(name)
         w.nextRow()
         w.button('OK')
         w.onSubmit(self.submit)
@@ -239,13 +239,18 @@ class MainForm:
         w.flags(ico=ico)
         w.startRow(0,30)
         w.button('Добавить')
-        w.onClick(lambda x: AddForm(self.addList))
+        w.onClick(lambda x: AddForm(self.addList, self.tk.read(self.searchName) if self.tk.read(self.searchName) else self.getListName()+' R'))
         w.nextRow(0,30)
         w.button('Переименовать')
         w.onClick(self.prep_rename)
         w.nextRow(0,30)
-        w.button('Заметка')
-        w.onClick(lambda x: RemarkForm(self.addToList))
+        w.startCol()
+        self.searchName = w.input()
+        w.onChange(lambda x: self.drawFileList())
+        w.nextCol(0,30)
+        w.button('x')
+        w.onClick(lambda x: self.drawFileList(''))
+        w.endCol()
         w.nextRow(1, 100)
         self.filelist = w.listbox()
         w.onSelect(self.showList)
@@ -276,8 +281,13 @@ class MainForm:
         self.mode_queue = w.button('Очередь')
         w.onClick(self.readAsQueue)
         w.nextRow(0,30)
+        w.startCol()
         self.listcapt = w.button('')
         w.onClick(self.listNameToClipboard)
+        w.nextCol(0,60)
+        w.button('+')
+        w.onClick(lambda x: RemarkForm(self.addToList, self.getFromClipboard()))
+        w.endCol()
         w.nextRow(3,50)
         self.records = w.listbox()
         w.onSelect(self.makeMenu)
@@ -354,9 +364,20 @@ class MainForm:
                 N.append(i[:-5])
         N.sort(key=lambda x: x.lower())
         return N
-    def drawFileList(self):
+    def drawFileList(self, search=None):
+        if search == None:
+            search = self.tk.read(self.searchName)
+        else:
+            self.tk.write(self.searchName, search)
         N = self.getFileList()
-        self.tk.write(self.filelist, N)
+        if not search:
+            M = N
+        else:
+            M = []
+            for i in N:
+                if re.search('(?i)'+search, i):
+                    M.append(i)
+        self.tk.write(self.filelist, M)
     def addList(self, s):
         x = RecList(s)
         self.drawFileList()
