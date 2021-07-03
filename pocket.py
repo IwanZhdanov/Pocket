@@ -281,10 +281,13 @@ class MainForm:
         self.mode_queue = w.button('Очередь')
         w.onClick(self.readAsQueue)
         w.nextRow(0,30)
-        w.startCol()
+        w.startCol(0,30)
+        w.button('?')
+        w.onClick(lambda x: self.find_sublist())
+        w.nextCol()
         self.listcapt = w.button('')
         w.onClick(self.listNameToClipboard)
-        w.nextCol(0,60)
+        w.nextCol(0,30)
         w.button('+')
         w.onClick(lambda x: RemarkForm(self.addToList, self.getFromClipboard()))
         w.endCol()
@@ -638,6 +641,35 @@ class MainForm:
             self.currentName = ''
             self.tk.write(self.records, [])
             self.drawFileList()
+
+    def find_sublist_by(self, name, search):
+        ret = ''
+        files = self.getFileList()
+        x = RecList(name)
+        for i in x.info():
+            if i == search: ret = name
+            if i in files:
+                ret = self.find_sublist_by(i, search)
+                if ret: break
+        return ret
+
+    def find_sublist(self):
+        cont = True
+        if cont:
+            name = self.getListName()
+            if not name: cont = False
+        if cont:
+            x = RecList(name)
+            inf = x.info()
+            if len(inf) == 0: cont = False
+        if cont:
+            search = inf[0]
+            found = self.find_sublist_by(name, search)
+            if not found: cont = False
+        if cont:
+            self.currentName = found
+            self.drawFileList()
+            self.showList(None)
 
     def showStates(self):
         self.tk.write(self.can_btn, 'К:'+self.canon.text())
