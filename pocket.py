@@ -298,6 +298,7 @@ class MainForm:
         w.nextRow(0,50)
         self.variants = w.listbox()
         w.onSelect(self.pickVariant)
+        w.onDoubleClick(self.forceAdd)
         w.nextRow(0,30)
         w.firstCol(1,sz)
         self.can_btn = w.button('Кан.')
