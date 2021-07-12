@@ -101,6 +101,14 @@ class RecList:
             return ret
         return ''
 
+    def removeByRegExp(self, reg):
+        lst = []
+        for i in self._data:
+            if not re.search('(?i)'+reg, i):
+                lst.append(i)
+        self._data = lst;
+        self.save()
+
     def clear(self):
         self._data = []
         self.save()
@@ -165,17 +173,14 @@ class RemarkForm:
         self.func(self.tk.read(self.name))
         self.tk.close()
 
-class RenameForm:
+class DeleteFromList:
     def __init__(self, name, func):
         self.func = func
-        self.old_name = name
-        w = Window('Переименовать')
+        w = Window('Удалить несколько записей')
         self.tk = w
-        w.label('Старое название:')
-        w.label('Новое название:')
-        w.nextCol()
-        w.label(name)
-        self.new_name = w.input(name)
+        w.label('Выражение:')
+        w.nextCol(1, 400)
+        self.reg = w.input(self.toReg(name))
         w.nextRow()
         w.button('OK')
         w.onSubmit(self.submit)
@@ -184,9 +189,19 @@ class RenameForm:
         w.onReset(w.close)
         w.go()
     def submit(self, tag):
-        self.func(self.old_name, self.tk.read(self.new_name))
+        self.func(self.tk.read(self.reg))
         self.tk.close()
-
+    def toReg(self, s):
+        if '\r' in s: s = s[:s.index('\r')]
+        while s and s[0] in ['\t', ' ']: s = s[1:]
+        while s and s[-1] in ['\t', ' ']:  s = s[:-1]
+        scr = '.\\/{}[]()|^&*+?'
+        ret = ''
+        for ch in s:
+            if ch in scr: ret += '\\'
+            ret += ch
+        ret = '^'+ret+'$'
+        return ret
 
 class Basket:
     def __init__(self, main):
@@ -256,8 +271,13 @@ class MainForm:
         w.onSelect(self.showList)
         w.onDoubleClick(self.forceAdd)
         w.nextRow(0,30)
+        w.startCol()
         w.button('Удалить')
         w.onClick(self.prep_removeList)
+        w.nextCol()
+        w.button('Очистить')
+        w.onClick(self.prep_deleteFromList)
+        w.endCol()
         w.endRow()
         w.nextCol(3, 200)
         w.startRow(0,30)
@@ -645,6 +665,26 @@ class MainForm:
             self.currentName = ''
             self.tk.write(self.records, [])
             self.drawFileList()
+
+    def prep_deleteFromList(self, tag):
+        name = self.getListName()
+        if name:
+            DeleteFromList(self.getFromClipboard(), self.deleteFromList)
+
+    def delRegFromList(self, name, reg):
+        files = self.getFileList()
+        x = RecList(name)
+        for i in x.info():
+            if i in files:
+                self.delRegFromList(i, reg)
+        x.removeByRegExp(reg)
+
+    def deleteFromList(self, reg):
+        name = self.getListName()
+        if name:
+            x = RecList(name)
+            self.delRegFromList(name, reg)
+            self.showList(None)
 
     def find_sublist_by(self, name, search):
         ret = ''
