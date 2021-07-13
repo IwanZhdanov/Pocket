@@ -173,6 +173,25 @@ class RemarkForm:
         self.func(self.tk.read(self.name))
         self.tk.close()
 
+class RenameForm:
+    def __init__(self, name, func):
+        self.func = func
+        self.old_name = name
+        w = Window('Переименовать')
+        self.tk = w
+        w.label('Старое название:')
+        w.label('Новое название:')
+        w.nextCol()
+        w.label(name)
+        self.new_name = w.input(name)
+        w.nextRow()
+        w.button('OK')
+        w.onSubmit(self.submit)
+    def submit(self, tag):
+        self.func(self.old_name, self.tk.read(self.new_name))
+        self.tk.close()
+
+
 class DeleteFromList:
     def __init__(self, name, func):
         self.func = func
