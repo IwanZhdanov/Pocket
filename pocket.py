@@ -223,10 +223,11 @@ class DeleteFromList:
         return ret
 
 class Basket:
-    def __init__(self, main):
+    def __init__(self, main, listName):
         self._main = main
+        self._listName = listName
 
-        w = Window('Корзина')
+        w = Window(listName)
         self.tk = w
         w.flags(top=True)
         w.firstRow(1,50)
@@ -242,15 +243,15 @@ class Basket:
         w.go()
 
     def change(self, tag):
-        self._main.readNext()
+        self._main.readNext(self._listName)
         self.getQua()
 
     def another(self, tag):
-        self._main.another(None)
+        self._main.another(self._listName)
         self.getQua()
 
     def getQua(self):
-        self.tk.write(self.btn, str(self._main.readQua()))
+        self.tk.write(self.btn, str(self._main.readQua(self._listName)))
 
     def getQuaTmr(self):
         self.getQua()
@@ -347,7 +348,7 @@ class MainForm:
         w.onClick(self.chMod)
         w.nextCol(1,sz)
         w.button('Корзина')
-        w.onClick(lambda x: Basket(self))
+        w.onClick(lambda x: Basket(self, self.getListName()))
         w.endRow()
 
         self.drawFileList()
@@ -467,8 +468,8 @@ class MainForm:
                 q += 1
         if q > 0: q -= 1
         return q
-    def readQua(self):
-        name = self.getListName()
+    def readQua(self, name=None):
+        if not name: name = self.getListName()
         if name:
             return self.getListQua(name)
         return 0
@@ -516,9 +517,9 @@ class MainForm:
         x.first(ret)
         return ret
 
-    def readCurrentValue(self, mode):
+    def readCurrentValue(self, mode, name=None):
         self.lastMode = mode
-        name = self.getListName()
+        if not name: name = self.getListName()
         val = ''
         if name:
             val = self.readValue(name, mode)
@@ -534,7 +535,7 @@ class MainForm:
     def readAsRandom(self, tag):
         self.readCurrentValue('random')
     def readNext(self, tag=None):
-        self.readCurrentValue(self.lastMode)
+        self.readCurrentValue(self.lastMode, tag)
 
     def listNameToClipboard(self, tag):
         name = self.getListName()
@@ -598,24 +599,26 @@ class MainForm:
         if '--' not in x.info():
             x.first('--')
         return ret
-    def asStart_soft(self, tag):
-        name = self.getListName()
+    def asStart_soft(self, tag=None):
+        if tag: name = tag
+        else: name = self.getListName()
         if name:
             self.markAsStart_soft(name)
         self.showList(None)
 
-    def another(self, tag):
+    def another(self, tag=None):
         if self.lastMode == 'stack':
             self.lastMode = 'random'
-        name = self.getListName()
+        if tag: name = tag
+        else: name = self.getListName()
         if name:
             x = RecList(name)
             info = x.info()
             if info:
                 start = info[0]
                 for loop in range(100):
-                    self.asStart_soft(None)
-                    self.readCurrentValue(self.lastMode)
+                    self.asStart_soft(name)
+                    self.readCurrentValue(self.lastMode, name)
                     y = RecList(name)
                     info2 = y.info()
                     if not info2 or info2[0] != start: break
