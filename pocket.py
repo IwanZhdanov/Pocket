@@ -383,6 +383,12 @@ class MainForm:
             f.close()
         return ret
 
+    def checkStopList(self, txt):
+        x = RecList('z_STOPLIST')
+        ret = txt in x.info()
+        if not ret: x.add(txt)
+        return ret
+
     def checkClipboard(self):
         info = self.getFromClipboard()
         info = re.search('^[^\r\n]*', info)[0]
@@ -394,6 +400,8 @@ class MainForm:
         if mod == 'nopassw' and self.is_passw(info): flag = False
         if self.canon.get() == 'on': info = self.make_canonical(info)
         if not info or info == self.lastInfo: flag = False
+        if flag:
+            flag = not self.checkStopList(info)
         if flag:
             self.lastInfo = info
             self.addToList(info)
