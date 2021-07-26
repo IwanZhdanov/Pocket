@@ -269,7 +269,7 @@ class MainForm:
 
         sz = 100
 
-        w = Window('Карман v2.0')
+        w = Window('Карман v2.0 (26.07.21)')
         self.tk = w
         w.flags(ico=ico)
         w.startRow(0,30)
