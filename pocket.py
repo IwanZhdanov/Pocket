@@ -235,7 +235,7 @@ class Basket:
         self.btn = w.button('0')
         w.onClick(self.change)
         w.nextCol(1,60)
-        w.button('x')
+        self.mark = w.button('x')
         w.onClick(self.another)
 
         self.getQuaTmr()
@@ -252,6 +252,7 @@ class Basket:
 
     def getQua(self):
         self.tk.write(self.btn, str(self._main.readQua(self._listName)))
+        self.tk.write(self.mark, 'L' if self._main.isLinkInClipboard() else 'not L')
 
     def getQuaTmr(self):
         self.getQua()
@@ -633,6 +634,10 @@ class MainForm:
     def setToClipboard(self, data):
         self.tk.tk.clipboard_clear()
         self.tk.tk.clipboard_append(data)
+
+    def isLinkInClipboard(self):
+        s = self.getFromClipboard()
+        return s[:4] == 'http'
 
     def makeMenuOptions(self, txt):
         ret = []
