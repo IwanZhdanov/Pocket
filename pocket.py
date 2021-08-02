@@ -270,7 +270,7 @@ class MainForm:
 
         sz = 100
 
-        w = Window('Карман v2.0 (26.07.21)')
+        w = Window('Карман v2.0 (02.08.2021)')
         self.tk = w
         w.flags(ico=ico)
         w.startRow(0,30)
@@ -458,6 +458,15 @@ class MainForm:
         self.currentName = name
         return name
 
+    def getListQuaOne(self, name):
+        x = RecList(name)
+        info = x.info()
+        q = 0
+        for i in info:
+            if not os.path.isfile(startdir+i+ext):
+                q += 1
+        if q > 0: q -= 1
+        return q
     def getListQua(self, name, first=True):
         x = RecList(name)
         info = x.info()
@@ -472,7 +481,7 @@ class MainForm:
     def readQua(self, name=None):
         if not name: name = self.getListName()
         if name:
-            return self.getListQua(name)
+            return str(self.getListQuaOne(name)) + ' / ' + str(self.getListQua(name))
         return 0
 
     def showList(self, tag):
@@ -481,7 +490,7 @@ class MainForm:
             x = RecList(name)
             M = x.info()
             self.tk.write(self.records, M)
-            self.tk.write(self.listcapt, name + ' ('+str(self.getListQua(name))+')')
+            self.tk.write(self.listcapt, name + ' ('+str(self.getListQuaOne(name))+' / '+str(self.getListQua(name))+')')
 
     def addToList(self, txt):
         name = self.getListName()
@@ -489,7 +498,7 @@ class MainForm:
             x = RecList(name)
             x.add(txt)
             self.tk.write(self.records, x.info())
-            self.tk.write(self.listcapt, name + ' ('+str(self.getListQua(name))+')')
+            self.tk.write(self.listcapt, name + ' ('+str(self.getListQuaOne(name))+' / '+str(self.getListQua(name))+')')
 
     def forceAdd(self, tag):
         self.addToList(self.getFromClipboard())
