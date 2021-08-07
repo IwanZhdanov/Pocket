@@ -398,7 +398,7 @@ class MainForm:
         if not info or info == self.lastInfo: flag = False
         mod = self.mode.get()
         if mod == 'off': flag = False
-        if mod == 'link' and info[0:4] != 'http': flag = False
+        if mod == 'link' and info[0:4] != 'http' and info[0:7] != 'file://': flag = False
         if mod == 'nopassw' and self.is_passw(info): flag = False
         if self.canon.get() == 'on': info = self.make_canonical(info)
         if not info or info == self.lastInfo: flag = False
@@ -646,7 +646,7 @@ class MainForm:
 
     def isLinkInClipboard(self):
         s = self.getFromClipboard()
-        return s[:4] == 'http'
+        return s[:4] == 'http' or s[:7] == 'file://'
 
     def makeMenuOptions(self, txt):
         ret = []
