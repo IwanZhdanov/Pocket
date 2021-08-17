@@ -407,7 +407,7 @@ class MainForm:
         if flag:
             self.lastInfo = info
             self.addToList(info)
-        if self.run: Timer(1, self.checkClipboard).start()
+        if self.run: Timer(0.3, self.checkClipboard).start()
 
     def getMultilangRegExp(self, txt):
         ret = "(?i)"
