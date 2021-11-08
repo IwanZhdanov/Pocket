@@ -3,17 +3,17 @@ Self:$0
 #(^.*(vk\.com).*$)
 YTDL:y $1 && exit
 T YTDL:ty $1 && exit
-#youtube\.com.*?[?\&]v=([^&]+)
+#youtube\.com.*?([?\&]v=|\/shorts\/)([^&]+)
 :https://www.youtube.com/watch?v=$2
-YTDL:y https://www.youtube.com/watch?v=$1 && exit
-YTDL 18:y https://www.youtube.com/watch?v=$1 -f 18 && exit
-YTDL 22:y https://www.youtube.com/watch?v=$1 -f 22 && exit
-YTDL audio:y https://www.youtube.com/watch?v=$1 -f 140 && exit
-T YTDL:ty https://www.youtube.com/watch?v=$1 && exit
-ytID:$1
-Youtube:https://www.youtube.com/watch?v=$1
-Preview image:https://i.ytimg.com/vi/$1/hq720.jpg
-Skip age:http://nsfwyoutube.com/watch?v=$1
+YTDL:y https://www.youtube.com/watch?v=$2 && exit
+YTDL 18:y https://www.youtube.com/watch?v=$2 -f 18 && exit
+YTDL 22:y https://www.youtube.com/watch?v=$2 -f 22 && exit
+YTDL audio:y https://www.youtube.com/watch?v=$2 -f 140 && exit
+T YTDL:ty https://www.youtube.com/watch?v=$2 && exit
+ytID:$2
+Youtube:https://www.youtube.com/watch?v=$2
+Preview image:https://i.ytimg.com/vi/$2/hq720.jpg
+Skip age:http://nsfwyoutube.com/watch?v=$2
 #youtube\.com.*?&list=([^&]+)
 Playlist:https://www.youtube.com/playlist?list=$1
 #^((?!http).*)$
