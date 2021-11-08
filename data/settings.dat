@@ -1,0 +1,53 @@
+#^(.*)$
+Self:$0
+#(^.*(vk\.com).*$)
+YTDL:y $1 && exit
+T YTDL:ty $1 && exit
+#youtube\.com.*?[?\&]v=([^&]+)
+:https://www.youtube.com/watch?v=$2
+YTDL:y https://www.youtube.com/watch?v=$1 && exit
+YTDL 18:y https://www.youtube.com/watch?v=$1 -f 18 && exit
+YTDL 22:y https://www.youtube.com/watch?v=$1 -f 22 && exit
+YTDL audio:y https://www.youtube.com/watch?v=$1 -f 140 && exit
+T YTDL:ty https://www.youtube.com/watch?v=$1 && exit
+ytID:$1
+Youtube:https://www.youtube.com/watch?v=$1
+Preview image:https://i.ytimg.com/vi/$1/hq720.jpg
+Skip age:http://nsfwyoutube.com/watch?v=$1
+#youtube\.com.*?&list=([^&]+)
+Playlist:https://www.youtube.com/playlist?list=$1
+#^((?!http).*)$
+Translate:https://translate.google.ru/?sl=auto&tl=ru&text=$1&op=translate
+SE Yandex:https://yandex.ru/search/?text=$1
+SE Google:https://www.google.ru/search?q=$1
+SE Rambler:https://nova.rambler.ru/search?query=$1
+SE Mail:https://go.mail.ru/search?q=$1
+SE VIDEO Youtube:https://www.youtube.com/results?search_query=$1
+SE VIDEO Search Twitch:https://www.twitch.tv/search?term=$1
+SE IMG gettyimages:https://www.gettyimages.com/search/2/image?family=creative&phrase=$1
+SE IMG freepik:https://www.freepik.com/search?dates=any&format=search&page=1&query=$1&sort=popular
+SE IMG pixabay:https://pixabay.com/images/search/$1/
+SE IMG istockphoto:https://www.istockphoto.com/en/search/2/image?mediatype=&phrase=$1
+SE IMG creative common:https://search.creativecommons.org/search?q=$1
+SE IMG dreamstime:https://www.dreamstime.com/photos-images/$1.html
+SE IMG google:https://www.google.ru/search?q=$1&tbm=isch
+SE IMG yandex:https://yandex.com/images/search?text=$1
+SE IMG pexels:https://www.pexels.com/search/$1/
+SE IMG unsplash:https://unsplash.com/s/photos/$1
+SE IMG freeimages:https://www.freeimages.com/search/$1
+SE Bing:https://www.bing.com/search?q=$1
+SE Yahoo:https://search.yahoo.com/search?p=$1
+SE Ask:https://www.ask.com/web?q=$1
+SE BoardReader:https://boardreader.com/s/$1.html
+SE Mojeek:https://www.mojeek.com/search?q=$1
+SE Ekoru:https://ekoru.org/?q=$1
+SE Ecosia:https://www.ecosia.org/search?q=$1
+SE DuckDuckGo:https://duckduckgo.com/?q=$1
+SE Qwant:https://www.qwant.com/?q=$1&t=web
+SE DogPile:https://www.dogpile.com/serp?q=$1
+SE AOL:https://search.aol.com/aol/search?q=$1
+SE SwissCows:https://swisscows.com/web?query=$1
+SE Gibiru:https://gibiru.com/results.html?q=$1
+SE Lycos:https://search.lycos.com/web/?q=$1
+SE WebCrawler:https://www.webcrawler.com/serp?q=$1
+SE Archive:https://archive.org/search.php?query=$1
